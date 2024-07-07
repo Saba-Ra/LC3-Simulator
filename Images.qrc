@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/new/prefix1">
-        <file>3048207.jpg</file>
         <file>NextButton.jpg</file>
-        <file>coding-vector-icon-design-illustration_1174953-67886.jpg</file>
         <file>Background.jpg</file>
     </qresource>
 </RCC>
