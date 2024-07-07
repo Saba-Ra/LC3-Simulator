@@ -54,7 +54,8 @@ The LC3 simulation involves executing instructions in a cycle consisting of six 
 
 ### Details of Each Phase
 
-For detailed explanations of each phase, please refer to [this document](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.cs.auckland.ac.nz/courses/compsci210s1c/lectures/Goodman/2013.03.28-1up.pdf).
+For detailed explanations of each phase, please refer to [this document](https://cs2461-2020.github.io/lectures/lc3ISA.pdf)
+.
 
 ![Project Overview](https://github.com/Saba-Ra/LC3-Architecture/blob/68bb79b072e124666a59939fc3c4324cdb23ad81/Project%20Overview.png)
 
