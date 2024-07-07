@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>lc3</class>
+ <widget class="QMainWindow" name="lc3">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1156</width>
+    <height>726</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>lc3</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #8dc2c4;</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="RUN">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>300</y>
+      <width>71</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/new/prefix1/NextButton.jpg);
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Phase">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>370</y>
+      <width>401</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 18pt &quot;Simplified Arabic Fixed&quot;;
+border: 1px solid rgb(0, 0, 54); /* Light gray border */
+color: rgb(0, 0, 127);font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;
+padding: 5px; /* Padding around the text */
+border-radius: 5px; /* Rounded corners */</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Upload_code">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>68</y>
+      <width>401</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/new/prefix1/Background.jpg);
+ border: 2px solid rgba(0, 0, 67, 255);
+        border-radius: 5px;
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="memoryTable">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>20</y>
+      <width>221</width>
+      <height>541</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>120</y>
+      <width>191</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:#152e2e; /* Text color: Dark gray */
+font: 800 28pt &quot;Traditional Arabic&quot;;
+background-color: qlineargradient(spread:pad, x1:0.835681, y1:0.215, x2:0, y2:0.994636, stop:0 rgba(8, 50, 59, 0), stop:0.98 rgba(202, 235, 255, 0), stop:1 rgba(0, 0, 0, 0));
+
+        padding: 8px 16px;</string>
+    </property>
+    <property name="text">
+     <string>Upload</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonStartasm">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>300</y>
+      <width>321</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start Assembly</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>180</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:#152e2e; /* Text color: Dark gray */
+font: 800 28pt &quot;Traditional Arabic&quot;;
+background-color: qlineargradient(spread:pad, x1:0.835681, y1:0.215, x2:0, y2:0.994636, stop:0 rgba(8, 50, 59, 0), stop:0.98 rgba(202, 235, 255, 0), stop:1 rgba(0, 0, 0, 0));
+
+        padding: 8px 16px;</string>
+    </property>
+    <property name="text">
+     <string>File</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>500</y>
+      <width>431</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string/>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>Negative</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Negative</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Positive</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>70</y>
+      <width>161</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="R0_in">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R1_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R2_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R3_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R4_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R5_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R6_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R7_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="PC_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="IR_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="MDR_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="MAR_in">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>70</y>
+      <width>65</width>
+      <height>394</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QLabel" name="R0">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R0:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R1">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R1:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R2">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R2:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R3">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R3:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R4">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R4:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R5">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R5:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R7">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R7:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="R6">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>R6:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="PC">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>PC:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="IR">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>IR:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="MDR">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>MDR:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="MAR">
+       <property name="styleSheet">
+        <string notr="true">font: 600 11pt &quot;Segoe UI Variable Display Semib&quot;;</string>
+       </property>
+       <property name="text">
+        <string>MAR:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1156</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

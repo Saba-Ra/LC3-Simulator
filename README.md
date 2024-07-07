@@ -1,1 +1,1 @@
-# LC3-Architecture
+# LC3
