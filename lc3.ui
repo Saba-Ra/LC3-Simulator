@@ -166,7 +166,7 @@ background-color: qlineargradient(spread:pad, x1:0.835681, y1:0.215, x2:0, y2:0.
     </column>
     <column>
      <property name="text">
-      <string>Negative</string>
+      <string>Zero</string>
      </property>
     </column>
     <column>

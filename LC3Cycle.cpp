@@ -15,11 +15,11 @@ uint16_t BaseR;
 uint16_t flag;
 uint16_t opcode;
 uint16_t address;
-uint16_t v_sr1;
-uint16_t v_sr2;
+uint16_t operand1;
+uint16_t operand2;
 uint16_t GateALU;
 uint16_t value;
-uint16_t sr;
+uint16_t SR;
 
 
 
@@ -68,7 +68,7 @@ void LC3Cycle::decode()
 
     case 0x3: //ST SR, LABEL
     {
-        DR = (registers.set_get_IR() >> 9) & 0x7;
+        SR = (registers.set_get_IR() >> 9) & 0x7;
         PCoffset9 = registers.set_get_IR() & 0x1FF;
         if (PCoffset9 & 0x0100) // Sign extension
         {
@@ -100,7 +100,7 @@ void LC3Cycle::decode()
         break;
     }
 
-    case  0x6: //LDR, DR, BaseR, offset6
+    case 0x6: //LDR, DR, BaseR, offset6
     {
         DR = (registers.set_get_IR() >> 9) & 0x0007;
         BaseR = (registers.set_get_IR() >> 6) & 0x0007;
@@ -112,58 +112,48 @@ void LC3Cycle::decode()
         break;
     }
 
-    case 0xA:
-        // LDI
+    case 0x7: //STR SR, BaseR, offset6
     {
-        DR = (registers.set_get_IR() >> 9) & 0x0007;
-        PCoffset9 = registers.set_get_IR() & 0x01FF;
-        if (PCoffset9 & 0x0100) // Sign extension
-        {
-            PCoffset9 |= 0xFE00;
-        }
-    }
-        break;
-
-    case 0xE:
-        // LEA
-    {
-        PCoffset9 = ir & 0x1FF;
-        if (PCoffset9 & 0x100)
-        {
-            PCoffset9 |= 0xFE00;
-        }
-
-        DR = (registers.set_get_IR() >> 9) & 0x0007;
-    }
-        break;
-
-    case 0xB:
-        //STI
-    {
-        DR = (registers.set_get_IR() >> 9) & 0x7;
-        PCoffset9 = registers.set_get_IR() & 0x1FF;
-        if (PCoffset9 & 0x0100) // Sign extension
-        {
-            PCoffset9 |= 0xFE00;
-        }
-    }
-        break;
-    case 0x7:
-        //STR
-    {
-        DR = (registers.set_get_IR() >> 9) & 0x7;
+        SR = (registers.set_get_IR() >> 9) & 0x7;
         BaseR = (registers.set_get_IR() >> 6) & 0x7;
-        PCoffset6 = registers.set_get_IR() & 0x3F;
+        PCoffset6 = registers.set_get_IR() & 0x3F; //PCoffset6 & 0000 0000 0011 1111
         if (PCoffset6 & 0x0020) // Sign extension
         {
-            PCoffset6 |= 0xFFC0;
+            PCoffset6 |= 0xFFC0; //PCoffset6 OR 1111 1111 1100 0000
         }
-    }
         break;
+    }
 
+    case 0x9: //NOT DR, SR
+    {
+        DR = (registers.set_get_IR() >> 9) & 0x7; // destination register
+        SR = (registers.set_get_IR() >> 6) & 0x7; // source register
+        break;
+    }
 
+    case 0xA: //LDI DR, LABEL
+    {
+        DR = (registers.set_get_IR() >> 9) & 0x0007;
+        PCoffset9 = registers.set_get_IR() & 0x01FF; //PCoffset9 & 0000 0001 1111 1111
+        if (PCoffset9 & 0x0100) // Sign extension
+        {
+            PCoffset9 |= 0xFE00; //PCoffset9 OR 1111 1110 0000 0000
+        }
+        break;
+    }
 
-    case 0xC:
+    case 0xB: //STI SR, LABEL
+    {
+        SR = (registers.set_get_IR() >> 9) & 0x7;
+        PCoffset9 = registers.set_get_IR() & 0x1FF; //PCoffset9 & 0000 0001 1111 1111
+        if (PCoffset9 & 0x0100) // Sign extension
+        {
+            PCoffset9 |= 0xFE00; //PCoffset9 OR 1111 1110 0000 0000
+        }
+        break;
+    }
+
+    case 0xC:  //RET
     {
         if (((registers.set_get_IR() >> 6) & 0x7) == 7) { // Check if it's a RET instruction
             //RET
@@ -172,17 +162,23 @@ void LC3Cycle::decode()
             //JMP
             BaseR = (registers.set_get_IR() >> 6) & 0x7;
         }
-    }
         break;
-    case 0x9:
-        //NOT
+    }
+
+    case 0xD: //reserved
+
+    case 0xE: //LEA DR, LABEL
     {
-        DR = (registers.set_get_IR() >> 9) & 0x7; // destination register
-        sr = (registers.set_get_IR() >> 6) & 0x7; // source register
-    }
+        DR = (registers.set_get_IR() >> 9) & 0x0007;
+        PCoffset9 = ir & 0x1FF; //PCoffset9 & 0000 0001 1111 1111
+        if (PCoffset9 & 0x100)
+        {
+            PCoffset9 |= 0xFE00; //PCoffset9 OR 1111 1110 0000 0000
+        }
         break;
+    }
+
     default:
-        // Handle unsupported opcode
         break;
     }
 }
@@ -191,61 +187,72 @@ void LC3Cycle::evaluateAddress(LC3Memory &memory)
 
     switch (opcode) {
     case 0x0:
-        //BR
+        //BR => PC = PC + SEXT(PCOFFSET9)
         address=registers.set_get_PC() + PCoffset9;
+        break;
     case 0x2:
-        // LD
+        // LD => DR = mem[PC + SEXT(PCoffset9)]
+        address = registers.set_get_PC() + PCoffset9;
+        // Set the address in MAR
+        registers.set_get_MAR()=address;
+        break;
+    case 0x3:
+        // ST => mem[PC + SEXT(PCoffset9)] = SR
         address = registers.set_get_PC() + PCoffset9;
         // Set the address in MAR
         registers.set_get_MAR()=address;
         break;
     case 0x4:
-        //JSR
+        //JSR => PC = PC + SEXT(PCOFFSET11)
         if (flag){
-            address=registers.set_get_PC() + PCoffset11; // Update PC with the offset
+            address=registers.set_get_PC() + PCoffset11;
         }else{
-            //JSRR
+            //JSRR => PC = BaseR
             address=registers.getR(BaseR);
         }
+        break;
+    case 0x6:
+        // LDR => DR = mem[BaseR + SEXT(offset6)]
+        address = registers.getR(BaseR) + PCoffset6;
+        registers.set_get_MAR()=address;
+        break;
+    case 0x7:
+        // STR => mem[BaseR + SEXT(offset6)] = SR
+        address = registers.getR(BaseR) + PCoffset6;
+        // Set the address in MAR
+        registers.set_get_MAR()=address;
+        break;
     case 0xA:
-        // LDI
+        // LDI => DR = mem[mem[PC + SEXT(PCoffset9)]]
         address = registers.set_get_PC() + PCoffset9;
         registers.set_get_MAR()=address;
         address = memory.read(registers.set_get_MAR());
         registers.set_get_MAR()=address;
         break;
-    case 0x6:
-        // LDR
-        address = registers.getR(BaseR) + PCoffset6;
+    case 0xB:
+        // STI => mem[mem[PC + SEXT(PCoffset9)]] = SR
+        address = registers.set_get_PC() + PCoffset9;
+        // Set the address in MAR
         registers.set_get_MAR()=address;
         break;
     case 0xC:
         //RET
     {
         if (((registers.set_get_IR() >> 6) & 0x7) == 7) {
-            // Set PC to the value contained in R7
+            // PC = R7
             address=registers.getR(7);
         }
-        //JMP
+        //JMP => PC = BaseR
         else {
             address=registers.getR(BaseR);
         }
+        break;
     }
     case 0xE:
-        // LEA
+        // LEA => DR = PC + SEXT(PCoffset9)
         address = registers.set_get_PC() + PCoffset9;
         break;
-    case 0x3:
-        // ST
-        address = registers.set_get_PC() + PCoffset9;
-        break;
-    case 0xB:
-        // STI
-        address = registers.set_get_PC() + PCoffset9;
-        break;
-    case 0x7:
-        // STR
-        address = registers.getR(BaseR) + PCoffset6;
+    default:
         break;
     }
 }
@@ -255,76 +262,63 @@ void LC3Cycle::fetchOperands(LC3Memory &memory)
     {
     case 0x1:
         // ADD
-        v_sr1 = registers.getR(SR1);
-        v_sr2 = registers.getR(SR2);
+        operand1 = registers.getR(SR1);
+        operand2 = registers.getR(SR2);
         break;
-    case 0x5:
-        // AND
-        v_sr1 = registers.getR(SR1);
-        v_sr2 = registers.getR(SR2);
-        break;
-    case 0x9:
-        //NOT
-        v_sr1=registers.getR(sr);
     case 0x2:
         // LD
         registers.set_get_MDR()=memory.read(registers.set_get_MAR());
         break;
-    case 0xA:
-        // LDI
-        registers.set_get_MDR()=memory.read(registers.set_get_MAR());
+    case 0x3:
+        //ST
+        value=registers.getR(SR);
+        break;
+    case 0x5:
+        // AND
+        operand1 = registers.getR(SR1);
+        operand2 = registers.getR(SR2);
         break;
     case 0x6:
         // LDR
         registers.set_get_MDR()=memory.read(registers.set_get_MAR());
         break;
-    case 0x3:
-        //ST
-        value=registers.getR(DR);
+    case 0x7:
+        //STR
+        value=registers.getR(SR);
+    case 0x9:
+        //NOT
+        operand1=registers.getR(SR);
+    case 0xA:
+        // LDI
+        registers.set_get_MDR()=memory.read(registers.set_get_MAR());
         break;
     case 0xB:
         //STI
-        value=registers.getR(DR);
+        value=registers.getR(SR);
         break;
-    case 0x7:
-        //STR
-        value=registers.getR(DR);
-
+    default:
+        break;
     }
 }
 void LC3Cycle::execute()
 {
-    uint16_t opcode = (registers.set_get_IR() >> 12) & 0xF;
-
     switch (opcode)
     {
     case 0x1:
         // ADD
-        if (is_imm)
-        {
-            // Immediate mode
-            GateALU=v_sr1 + static_cast<int16_t>(imm5);
-        } else {
-            // Register mode
-            GateALU=v_sr1 + v_sr2;
-        }
+        // Calculate GateALU based on the mode (Immediate or Register)
+        GateALU = is_imm ? (operand1 + static_cast<int16_t>(imm5)) : (operand1 + operand2);
         break;
     case 0x5:
         // AND
-        if (is_imm)
-        {
-            // Immediate mode
-            GateALU = registers.getR(SR1) & static_cast<int16_t>(imm5);
-        }
-        else
-        {
-            // Register mode
-            GateALU = registers.getR(SR1) & registers.getR(SR2);
-        }
+        // Calculate GateALU based on the mode (Immediate or Register)
+        GateALU = is_imm ? (registers.getR(SR1) & static_cast<int16_t>(imm5)) : (registers.getR(SR1) & registers.getR(SR2));
         break;
     case 0x9:
         //NOT
-        GateALU=~v_sr1; // bitwise NOT operation
+        GateALU=~operand1;
+        break;
+    default:
         break;
     }
 }
@@ -334,39 +328,26 @@ void LC3Cycle::storeResults(LC3Memory &memory)
     {
     case 0x0:
     { // BR
-        // Get current condition codes
         uint16_t cc = registers.set_get_CC();
         // Check if any of the conditions are met
-        bool condition_met = ((nzp & 0x4) && (cc & 0x4)) || // n bit
-                ((nzp & 0x2) && (cc & 0x2)) || // z bit
-                ((nzp & 0x1) && (cc & 0x1));   // p bit
-        if (condition_met)
+        bool condition = ((nzp & 0x4) && (cc & 0x4)) || // n
+                ((nzp & 0x2) && (cc & 0x2)) || // z
+                ((nzp & 0x1) && (cc & 0x1));   // p
+        if (condition)
         {
-            // Update PC with the offset if the condition is met
             registers.set_get_PC()=address;
         }
-    }
         break;
+    }
     case 0x1:
         // ADD
     {
-        // Set condition codes
         registers.setR(DR, GateALU);
+
         uint16_t result = registers.getR(DR);
-        if (result == 0)
-        {
-            registers.set_get_CC()=0x02; // Zero
-        }
-        else if (result >> 15)
-        {
-            registers.set_get_CC()=0x04; // Negative
-        }
-        else
-        {
-            registers.set_get_CC()=0x01; // Positive
-        }
-    }
+        registers.set_get_CC() = (result == 0) ? 0x02 : ((result >> 15) ? 0x04 : 0x01);
         break;
+    }
     case 0x2:
         // LD
     {
@@ -449,8 +430,6 @@ void LC3Cycle::storeResults(LC3Memory &memory)
     case 0x3:
         //ST
     {
-        // Set the address in MAR
-        registers.set_get_MAR()=address;
         // Set the value to be stored in MDR
         registers.set_get_MDR()=value;
 
@@ -462,8 +441,6 @@ void LC3Cycle::storeResults(LC3Memory &memory)
     case 0xB:
         //STI
     {
-        // Set the address in MAR
-        registers.set_get_MAR()=address;
         // Set the value to be stored in MDR
         registers.set_get_MDR()=value;
         // Store the value in the SR to the memory at the address pointed to by the computed address
@@ -475,8 +452,7 @@ void LC3Cycle::storeResults(LC3Memory &memory)
     case 0x7:
         //STR
     {
-        // Set the address in MAR
-        registers.set_get_MAR()=address;
+
         // Set the value to be stored in MDR
         registers.set_get_MDR()=value;
 

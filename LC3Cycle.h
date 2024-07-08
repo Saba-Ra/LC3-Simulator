@@ -18,11 +18,11 @@ extern uint16_t BaseR;
 extern uint16_t flag;
 extern uint16_t opcode;
 extern uint16_t address;
-extern uint16_t v_sr1;
-extern uint16_t v_sr2;
+extern uint16_t operand1;
+extern uint16_t operand2;
 extern uint16_t GateALU;
 extern uint16_t value;
-extern uint16_t sr;
+extern uint16_t SR;
 class LC3Cycle
 {
 public:
