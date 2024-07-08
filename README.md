@@ -57,7 +57,7 @@ The LC3 simulation involves executing instructions in a cycle consisting of six 
 For detailed explanations of each phase, please refer to [this document](https://cs2461-2020.github.io/lectures/lc3ISA.pdf)
 .
 
-![Project Overview](https://github.com/Saba-Ra/LC3-Architecture/blob/68bb79b072e124666a59939fc3c4324cdb23ad81/Project%20Overview.png)
+![Project Overview](https://github.com/Saba-Ra/LC3-Architecture/blob/5c9689f7ae71fdd2b9067e332f0b8dc57377f3c3/Project%20Overview.png)
 
 ### How to Use:
 
